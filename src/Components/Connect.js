@@ -6,7 +6,7 @@ import cx from 'classnames';
 const connect = (props) => {
     const context = useWeb3Context();
     console.log(props.connection)
-    let connection = Object.keys(props.connection).map(connectorName => (
+    let connective = Object.keys(props.connection).map(connectorName => (
         <button
         key={connectorName}
         onClick={() => {
@@ -19,7 +19,7 @@ const connect = (props) => {
     ))
 
     return(
-    connection
+    connective
     )
 }
 

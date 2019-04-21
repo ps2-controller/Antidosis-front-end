@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import './App.css';
 import { ethers } from 'ethers';
 import Web3Provider from 'web3-react';
-import MintToken from './Components/MintToken/MintToken'
-import { Connectors } from 'web3-react'
-import contracts from './Contracts'
+import MintToken from './Components/MintToken/MintToken';
+import { Connectors } from 'web3-react';
+import FortmaticApi from "fortmatic";
+import contracts from './Contracts';
 import Connect from './Components/Connect';
 import LockForm from './Components/LockForm/LockForm';
 import GetDai from './Components/GetDai/GetDai';
@@ -91,6 +92,7 @@ class App extends Component {
   }
 
   getDaiHandler = async (context) => {
+    console.log(context.library);
     let daiContract = new ethers.Contract(contracts.dai.address, contracts.dai.ABI, context.library.getSigner())
     await daiContract.functions.createTokens(context.account, ethers.utils.bigNumberify("10000000000000000000000000"));
     await daiContract.balanceOf(context.account).toString();
@@ -182,14 +184,21 @@ class App extends Component {
     const defaultNetwork = 4;
     const supportedNetworkURLs =  {4: 'rinkeby.infura.io/v3/4faf52f5e97a401ea7a59c628d8fa02e'};
     
-    const {InjectedConnector, LedgerConnector} = Connectors;
+    const {InjectedConnector, NetworkOnlyConnector, FortmaticConnector, LedgerConnector} = Connectors;
     const MetaMask = new InjectedConnector({ supportedNetworks: [ 4 ] });
 
     const Ledger = new LedgerConnector({
       supportedNetworkURLs,
       defaultNetwork
     });
-    const connectors = {MetaMask, Ledger};
+
+    const Fortmatic = new FortmaticConnector({
+      api: FortmaticApi,
+      apiKey: 'pk_test_13A1FD4E48D9438E',
+      logoutOnDeactivation: false
+    });
+
+    const connectors = {MetaMask, Ledger, Fortmatic};
 
     if(this.state.context === null){
       return(

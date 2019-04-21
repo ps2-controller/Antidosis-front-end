@@ -918,6 +918,13 @@
   dependencies:
     regenerator-runtime "^0.12.0"
 
+"@babel/runtime@7.3.4":
+  version "7.3.4"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.3.4.tgz#73d12ba819e365fcf7fd152aed56d6df97d21c83"
+  integrity sha512-IvfvnMdSaLBateu0jfsYIpZTxAc2cKEXEMiezGGN75QcBcecDUKd3PgLAncT0oOgxKy8dd8hrJKj9MfzgfZd6g==
+  dependencies:
+    regenerator-runtime "^0.12.0"
+
 "@babel/template@^7.1.0", "@babel/template@^7.1.2", "@babel/template@^7.2.2":
   version "7.2.2"
   resolved "https://registry.yarnpkg.com/@babel/template/-/template-7.2.2.tgz#005b3fdf0ed96e88041330379e0da9a708eb2907"
@@ -1212,6 +1219,13 @@
   integrity sha512-yHr8mX2SoX3JNyfqdLXdO1UobsGhfiwSgtekbVxKLQrzD7vtpPkKbkIVsPFOhvekvNbPsCmDyeDCLkpeI9gSmA==
   dependencies:
     "@types/ethereum-protocol" "*"
+
+"@web3-react/fortmatic@^4.0.4":
+  version "4.0.4"
+  resolved "https://registry.yarnpkg.com/@web3-react/fortmatic/-/fortmatic-4.0.4.tgz#1eca1114ecef857597e3465fdddf22aa5905a6fd"
+  integrity sha512-T8LSQsS8qk8ImusAm2mkclxs/ht02CSivmGPguXiU3qpd4RG0xBstLBY5ZPZhDXew4iwRlzMTeUcG+ZSlRdsgg==
+  dependencies:
+    fortmatic "^0.7"
 
 "@webassemblyjs/ast@1.7.11":
   version "1.7.11"
@@ -5506,6 +5520,13 @@ form-data@~2.3.2:
     asynckit "^0.4.0"
     combined-stream "^1.0.6"
     mime-types "^2.1.12"
+
+fortmatic@^0.7:
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/fortmatic/-/fortmatic-0.7.0.tgz#978fa01e56a0fb1e5fb167c8fb366e8f100b57cd"
+  integrity sha512-ZLHy7g3z9jKkfba7Ow8H7ZR0IbKAG7wUy062BKBMGrDFqtM2ii7n4eMRYNWcqvsZXZ3E26CxXEqIFI81ibTdLw==
+  dependencies:
+    "@babel/runtime" "7.3.4"
 
 forwarded@~0.1.2:
   version "0.1.2"
@@ -12626,10 +12647,10 @@ web3-providers-ws@1.0.0-beta.35:
     web3-core-helpers "1.0.0-beta.35"
     websocket "git://github.com/frozeman/WebSocket-Node.git#browserifyCompatible"
 
-web3-react@^4.0.4:
-  version "4.0.4"
-  resolved "https://registry.yarnpkg.com/web3-react/-/web3-react-4.0.4.tgz#23a4daf7fdd104fa46d50ec5dda6936760e334fb"
-  integrity sha512-lGfbh3hEGq29tVNrJLeXC+sbwqpqbIDq92Y6OZ42ccGi/f+mjR/NBza1OJhUIycV3j0HA7nQqb8NgUQZjYS3qw==
+web3-react@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/web3-react/-/web3-react-5.0.1.tgz#e259f3aaee0d33661eaed3c974dad36abaf0bf1b"
+  integrity sha512-oCxKEjVHRIUNIy1DGtk7GkLHs62EIOLsG2nUqS7mFPRlyjxtK5fmrOPyQ4vAxqsfE8EhNHJUjLilxauXpFjFoA==
   dependencies:
     "@0x/subproviders" "^4.0.5"
 
