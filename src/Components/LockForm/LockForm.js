@@ -59,10 +59,11 @@ class LockForm extends Component {
                 <div className={cx(globalStyles.row)}>
                     <div className={cx(globalStyles.col)}>
                         <label>
-                        ERC-721 Contract Address
+                        ERC-721 Contract
 
                         </label>
                         <input
+                        className={cx(globalStyles.pb-2)}
                         prepopulated={this.props.prepopulated}
                         type="text"
                         name="erc721Address"
@@ -88,12 +89,14 @@ class LockForm extends Component {
                         <label>
                             Payment Address
                         </label>
+                    <div className={cx(globalStyles.col)}>
                         <input
                             type="text"
                             name="paymentAddress"
                             value={this.state.formControls.paymentAddress.value} 
                             onChange={this.changeHandler}
                         />
+                    </div>
                     </div>
                     <div className={cx(globalStyles.col)}>                        <label>
                             Tax Address
@@ -168,7 +171,7 @@ class LockForm extends Component {
                     </div>
                     <div className={cx(globalStyles.col)}>
                         <label>
-                            Tax Rate
+                            Token Tax Rate
                         </label>
                         <input
                             type="text"
@@ -179,12 +182,14 @@ class LockForm extends Component {
                     </div>
                 </div>
             </form>
+            <div className={cx(globalStyles.container)}>
             <button
                 className={cx(globalStyles.btn, globalStyles['btn-primary'], styles.formSubmitButton)}
                 onClick={() => {this.props.click(this.state.formControls)}}
             >
                 Submit
             </button>
+            </div>
         </div>
     }
 }

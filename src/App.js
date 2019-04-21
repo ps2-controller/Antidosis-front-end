@@ -5,6 +5,7 @@ import Web3Provider from 'web3-react';
 import MintToken from './Components/MintToken/MintToken'
 import { Connectors } from 'web3-react'
 import contracts from './Contracts'
+import Connect from './Components/Connect';
 import LockForm from './Components/LockForm/LockForm';
 import GetDai from './Components/GetDai/GetDai';
 import AllowDai from './Components/AllowDai/AllowDai';
@@ -16,9 +17,9 @@ import TransferTokens from './Components/TransferTokens/TransferTokens';
 
 class App extends Component {
   state = {
-    tokenId: '',
-    context: '',
-    atcAddress: '',
+    context: null,
+    tokenId: null,
+    atcAddress: null,
     setHarbergerValues: {
       userValue: null,
       userDuration: null
@@ -31,11 +32,15 @@ class App extends Component {
     transferAmount: null
   }
 
+  connectHandler = (context) =>{
+    this.setState({context: context})
+  }
+
   mintTokenHandler = async (context) => {
     let dummy721Contract = new ethers.Contract(contracts.dummy721.address, contracts.dummy721.ABI, context.library.getSigner());
     await dummy721Contract.functions.mintUniqueTokenTo(context.account);
     await dummy721Contract.once('minted', (res) => {
-      this.setState({context: context, tokenId: res.toNumber()});
+      this.setState({tokenId: res.toNumber()});
     });
   }
   lockTokenHandler = async (formControls) => {
@@ -170,52 +175,77 @@ class App extends Component {
       console.log(res.toString());
     });
   }
+
+
   
   render() {
-    const {InjectedConnector} = Connectors;
+    const defaultNetwork = 4;
+    const supportedNetworkURLs =  {4: 'rinkeby.infura.io/v3/4faf52f5e97a401ea7a59c628d8fa02e'};
+    
+    const {InjectedConnector, LedgerConnector} = Connectors;
     const MetaMask = new InjectedConnector({ supportedNetworks: [ 4 ] });
-    const connectors = {MetaMask};
 
-    return (
-      <Web3Provider
-      connectors = {connectors}
-      libraryName={'ethers.js'}
-      >
-        <MintToken
-          clicked={this.mintTokenHandler}/>
-        <p>{this.state.tokenId}</p>
-        <GetDai
-          clicked={this.getDaiHandler}
-        /> 
-        <LockForm
-          prepopulated='abc'
-          click={this.lockTokenHandler}
-        />
-        <AllowDai
-          changed={this.allowDaiChangeHandler}
-          clicked={this.allowDaiClickHandler}
-        />
-        <SetHarberger
-          valChanged={this.harbergerValueChangeHandler}
-          durChanged={this.harbergerDurationChangeHandler}
-          clicked={this.setHarbergerClickHandler}
-        />
-        <TakeTokens
-          changed={this.takeTokensChangeHandler}
-          clicked={this.takeTokensClickHandler}
-        />
-        <GetHarberger
-          clicked={this.getHarbergerClickHandler}
-          changed={this.getHarbergerChangeHandler}
-        />
+    const Ledger = new LedgerConnector({
+      supportedNetworkURLs,
+      defaultNetwork
+    });
+    const connectors = {MetaMask, Ledger};
 
-        <TransferTokens
-          fromChanged={this.transferFromChangeHandler}
-          amountChanged={this.transferAmountChangeHandler}
-          clicked={this.transferClickHandler}
+    if(this.state.context === null){
+      return(
+        <Web3Provider
+        connectors = {connectors}
+        libraryName={'ethers.js'}
+        >
+        <Connect
+          clicked={this.connectHandler}
+          connection={connectors}
         />
-      </Web3Provider>
-    );
+        
+        </Web3Provider>
+      )
+    } else {
+      return (
+        <Web3Provider
+        connectors = {connectors}
+        libraryName={'ethers.js'}
+        >
+          <MintToken
+            clicked={this.mintTokenHandler}/>
+          <p>{this.state.tokenId}</p>
+          <GetDai
+            clicked={this.getDaiHandler}
+          /> 
+          <LockForm
+            prepopulated='abc'
+            click={this.lockTokenHandler}
+          />
+          <AllowDai
+            changed={this.allowDaiChangeHandler}
+            clicked={this.allowDaiClickHandler}
+          />
+          <SetHarberger
+            valChanged={this.harbergerValueChangeHandler}
+            durChanged={this.harbergerDurationChangeHandler}
+            clicked={this.setHarbergerClickHandler}
+          />
+          <TakeTokens
+            changed={this.takeTokensChangeHandler}
+            clicked={this.takeTokensClickHandler}
+          />
+          <GetHarberger
+            clicked={this.getHarbergerClickHandler}
+            changed={this.getHarbergerChangeHandler}
+          />
+
+          <TransferTokens
+            fromChanged={this.transferFromChangeHandler}
+            amountChanged={this.transferAmountChangeHandler}
+            clicked={this.transferClickHandler}
+          />
+        </Web3Provider>
+      )
+    }
   }
 }
 

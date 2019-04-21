@@ -1,10 +1,15 @@
 .formSubmitButton{
-    background-color: black;
+    background-color: rgb(111, 137, 185);
     borderColor: gray;
-    : center;
-    width: 600px
+    text-align:  center;
+    align-items: center;
+    width: 600px;
 }
 
 .formRightSide{
     text-align: right;
+}
+
+.padding{
+    padding: all;
 }
