@@ -1,0 +1,10 @@
+.formSubmitButton{
+    background-color: black;
+    borderColor: gray;
+    : center;
+    width: 600px
+}
+
+.formRightSide{
+    text-align: right;
+}
