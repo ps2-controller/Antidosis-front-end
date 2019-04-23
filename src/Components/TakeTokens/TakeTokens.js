@@ -16,7 +16,7 @@ const takeTokens = (props) => {
                 onChange={(event) => {props.changed(event)}}
             />
             <button
-                className={cx(globalStyles.btn, globalStyles['btn-primary'], styles.takeTokensButton)}
+                className={cx(globalStyles.btn, globalStyles['btn-secondary'], styles.takeTokensButton)}
                 onClick={() => {props.clicked(context)}}>   
                 Take Token Shares
             </button>

@@ -2,59 +2,13 @@ import React, {Component} from 'react';
 import styles from './LockForm.module.css';
 import globalStyles from './../../Assets/global-styles/bootstrap.min.module.css';
 import cx from 'classnames';
+import { useWeb3Context } from 'web3-react';
 
-class LockForm extends Component {
-    state = {
-        formControls: {
-            erc721Address: {
-                value:''
-            },
-            tokenId: {
-                value:''
-            },
-            paymentAddress: {
-                value:''
-            },
-            taxAddress: {
-                value:''
-            },
-            erc20Supply: {
-                value:''
-            },
-            erc20Name: {
-                value:''
-            },
-            erc20Symbol: {
-                value:''
-            },
-            erc20Decimals: {
-                value:''
-            },
-            minShares: {
-                value:''
-            },
-            taxRate: {
-                value:''
-            }
-        }
-    }
+const lockForm = (props) => {
+    const context = useWeb3Context();
 
-    changeHandler = (event) => {
-         const name = event.target.name;
-         const value = event.target.value;
-         this.setState({
-             formControls: {
-                 ...this.state.formControls,
-                 [name]: {
-                     ...this.state.formControls[name],
-                     value
-                 }
-             }
-         })
-    }
-
-    render(){
-        return <div className={cx(globalStyles.container)}>
+    return(
+        <div className={cx(globalStyles.container)}>
             <form>
                 <div className={cx(globalStyles.row)}>
                     <div className={cx(globalStyles.col)}>
@@ -64,11 +18,10 @@ class LockForm extends Component {
                         </label>
                         <input
                         className={cx(globalStyles.pb-2)}
-                        prepopulated={this.props.prepopulated}
+                        // prepopulated={props.prepopulated}
                         type="text"
                         name="erc721Address"
-                        value={this.state.formControls.erc721Address.value} 
-                        onChange={this.changeHandler}
+                        onChange={(event) => {props.changed(event, 'erc721Address')}}
                         />
                     </div>
                     <div className={cx(globalStyles.col)}>
@@ -76,11 +29,10 @@ class LockForm extends Component {
                         ERC-721 Token Id
                         </label>
                         <input
-                        prepopulated={this.props.prepopulated}
+                        // prepopulated={this.props.prepopulated}
                         type="text"
                         name="tokenId"
-                        value={this.state.formControls.tokenId.value} 
-                        onChange={this.changeHandler}
+                        onChange={(event) => {props.changed(event, 'tokenId')}}
                         />
                     </div>
                 </div>
@@ -93,8 +45,7 @@ class LockForm extends Component {
                         <input
                             type="text"
                             name="paymentAddress"
-                            value={this.state.formControls.paymentAddress.value} 
-                            onChange={this.changeHandler}
+                            onChange={(event) => {props.changed(event, 'paymentAddress')}}
                         />
                     </div>
                     </div>
@@ -104,8 +55,7 @@ class LockForm extends Component {
                         <input
                             type="text"
                             name="taxAddress"
-                            value={this.state.formControls.taxAddress.value} 
-                            onChange={this.changeHandler}
+                            onChange={(event) => {props.changed(event, 'taxAddress')}}
                         />
                     </div>
                 </div>
@@ -117,8 +67,7 @@ class LockForm extends Component {
                         <input
                             type="text"
                             name="erc20Supply"
-                            value={this.state.formControls.erc20Supply.value} 
-                            onChange={this.changeHandler}
+                            onChange={(event) => {props.changed(event, 'erc20Supply')}}
                         />
                     </div>
                     <div className={cx(globalStyles.col)}>  
@@ -128,8 +77,7 @@ class LockForm extends Component {
                         <input
                             type="text"
                             name="erc20Name"
-                            value={this.state.formControls.erc20Name.value} 
-                            onChange={this.changeHandler}
+                            onChange={(event) => {props.changed(event, 'erc20Name')}}
                         />
                     </div>
                 </div>
@@ -141,8 +89,7 @@ class LockForm extends Component {
                         <input
                             type="text"
                             name="erc20Symbol"
-                            value={this.state.formControls.erc20Symbol.value} 
-                            onChange={this.changeHandler}
+                            onChange={(event) => {props.changed(event, 'erc20Symbol')}}
                         />
                     </div>
                     <div className={cx(globalStyles.col)}> 
@@ -152,8 +99,7 @@ class LockForm extends Component {
                         <input
                             type="text"
                             name="erc20Decimals"
-                            value={this.state.formControls.erc20Decimals.value} 
-                            onChange={this.changeHandler}
+                            onChange={(event) => {props.changed(event, 'erc20Decimals')}}
                         />
                     </div>
                 </div>
@@ -165,8 +111,7 @@ class LockForm extends Component {
                         <input
                             type="text"
                             name="minShares"
-                            value={this.state.formControls.minShares.value} 
-                            onChange={this.changeHandler}
+                            onChange={(event) => {props.changed(event, 'minShares')}}
                         />
                     </div>
                     <div className={cx(globalStyles.col)}>
@@ -175,9 +120,8 @@ class LockForm extends Component {
                         </label>
                         <input
                             type="text"
-                            name="taxRate"
-                            value={this.state.formControls.taxRate.value} 
-                            onChange={this.changeHandler}
+                            name="taxRate" 
+                            onChange={(event) => {props.changed(event, 'taxRate')}}
                         />
                     </div>
                 </div>
@@ -185,13 +129,14 @@ class LockForm extends Component {
             <div className={cx(globalStyles.container)}>
             <button
                 className={cx(globalStyles.btn, globalStyles['btn-primary'], styles.formSubmitButton)}
-                onClick={() => {this.props.click(this.state.formControls)}}
+                onClick={() => {props.clicked(context)}}
             >
                 Submit
             </button>
             </div>
         </div>
-    }
+
+    )
 }
 
-export default LockForm;
+export default lockForm;

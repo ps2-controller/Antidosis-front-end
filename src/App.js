@@ -30,7 +30,19 @@ class App extends Component {
     formControls: null,
     getHarbergerAddress: null,
     transferFrom: null,
-    transferAmount: null
+    transferAmount: null,
+    formControls: {
+      erc721Address: null,
+      tokenId: null,
+      paymentAddress: null,
+      taxAddress: null,
+      erc20Supply: null,
+      erc20Name: null,
+      erc20Symbol: null,
+      erc20Decimals: null,
+      minShares: null,
+      taxRate: null
+    }
   }
 
   connectHandler = (context) =>{
@@ -44,20 +56,32 @@ class App extends Component {
       this.setState({tokenId: res.toNumber()});
     });
   }
-  lockTokenHandler = async (formControls) => {
-    this.setState({formControls: formControls});
-    let erc721Address = formControls.erc721Address.value;
-    let tokenId = formControls.tokenId.value;
-    let paymentAddress = formControls.paymentAddress.value.toString();
-    let taxAddress = formControls.taxAddress.value.toString();
-    let erc20Supply = formControls.erc20Supply.value;
-    let erc20Name = formControls.erc20Name.value;
-    let erc20Symbol = formControls.erc20Symbol.value;
-    let erc20Decimals = formControls.erc20Decimals.value;
-    let minShares = JSON.stringify(formControls.minShares.value * Math.pow(10, formControls.erc20Decimals.value));
-    let taxRate = formControls.taxRate.value;
+
+  formControlHandler = async (event, name) => {
+    let formControlsInstance = {...this.state.formControls};
+    formControlsInstance[name] = event.target.value;
+    
+    this.setState({
+      formControls: formControlsInstance
+  })
+  }
+
+  lockTokenHandler = async (context) => {
+    console.log(this.state.formCont);
+    console.log(context);
+    let erc721Address = this.state.formControls.erc721Address;
+    let tokenId = this.state.formControls.tokenId;
+    let paymentAddress = this.state.formControls.paymentAddress.toString();
+    let taxAddress = this.state.formControls.taxAddress.toString();
+    let erc20Supply = this.state.formControls.erc20Supply;
+    let erc20Name = this.state.formControls.erc20Name;
+    let erc20Symbol = this.state.formControls.erc20Symbol;
+    let erc20Decimals = this.state.formControls.erc20Decimals;
+    let minShares = JSON.stringify(this.state.formControls.minShares * Math.pow(10, this.state.formControls.erc20Decimals));
+    let taxRate = this.state.formControls.taxRate;
 
     let addressesToUse = [paymentAddress, taxAddress];
+    console.log('hi');
     let _data = await ethers.utils.defaultAbiCoder.encode(
       [
         'address[2] memory', 
@@ -77,14 +101,14 @@ class App extends Component {
         minShares, 
         taxRate
       ]);
-    let dummy721Contract = new ethers.Contract(erc721Address, contracts.dummy721.ABI, this.state.context.library.getSigner());
-    await dummy721Contract['safeTransferFrom(address,address,uint256,bytes)'](this.state.context.account, contracts.tokenizeCore.address, tokenId, _data, {gasLimit: 5000000});
-    let tokenizeCoreContract = new ethers.Contract(contracts.tokenizeCore.address, contracts.tokenizeCore.ABI, this.state.context.library.getSigner());
+    let dummy721Contract = new ethers.Contract(erc721Address, contracts.dummy721.ABI, context.library.getSigner());
+    await dummy721Contract['safeTransferFrom(address,address,uint256,bytes)'](context.account, contracts.tokenizeCore.address, tokenId, _data, {gasLimit: 5000000});
+    let tokenizeCoreContract = new ethers.Contract(contracts.tokenizeCore.address, contracts.tokenizeCore.ABI, context.library.getSigner());
     await tokenizeCoreContract.once("receivedToken", (res) => {
       console.log("Token ID: " + res.toNumber());
     });
     await tokenizeCoreContract.once("lockingToken", (res) => {
-      console.log(res);
+      this.setState({atcAddress: res});
     });
     await tokenizeCoreContract.once("newAssetTokenizationContractCreated", (res) => {
       console.log("Asset Tokenization Contract Address: " + res);
@@ -92,7 +116,6 @@ class App extends Component {
   }
 
   getDaiHandler = async (context) => {
-    console.log(context.library);
     let daiContract = new ethers.Contract(contracts.dai.address, contracts.dai.ABI, context.library.getSigner())
     await daiContract.functions.createTokens(context.account, ethers.utils.bigNumberify("10000000000000000000000000"));
     await daiContract.balanceOf(context.account).toString();
@@ -178,8 +201,6 @@ class App extends Component {
     });
   }
 
-
-  
   render() {
     const defaultNetwork = 4;
     const supportedNetworkURLs =  {4: 'rinkeby.infura.io/v3/4faf52f5e97a401ea7a59c628d8fa02e'};
@@ -199,6 +220,18 @@ class App extends Component {
     });
 
     const connectors = {MetaMask, Ledger, Fortmatic};
+    let tokenId;
+    if(this.state.tokenId !== null){
+      tokenId = (
+        <p>{"Your demo Token ID is: " + this.state.tokenId}</p>
+      );
+    }
+    let atcAddress;
+    if(this.state.atcAddress !== null){
+      atcAddress = (
+        <p>{"Asset Tokenization Contract Address: " + this.state.atcAddress}</p>
+      )
+    }
 
     if(this.state.context === null){
       return(
@@ -221,32 +254,45 @@ class App extends Component {
         >
           <MintToken
             clicked={this.mintTokenHandler}/>
-          <p>{this.state.tokenId}</p>
+            {tokenId}
+
+          <br />
+          
           <GetDai
             clicked={this.getDaiHandler}
           /> 
-          <LockForm
-            prepopulated='abc'
-            click={this.lockTokenHandler}
-          />
+          <br />
+          <br />
+           <LockForm
+            // prepopulated='abc'
+            clicked={this.lockTokenHandler}
+            changed={this.formControlHandler}
+           />
+          {atcAddress}
+
+          <br />
+
           <AllowDai
             changed={this.allowDaiChangeHandler}
             clicked={this.allowDaiClickHandler}
           />
+          <br />
           <SetHarberger
             valChanged={this.harbergerValueChangeHandler}
             durChanged={this.harbergerDurationChangeHandler}
             clicked={this.setHarbergerClickHandler}
           />
+          <br />
           <TakeTokens
             changed={this.takeTokensChangeHandler}
             clicked={this.takeTokensClickHandler}
           />
+          <br />
           <GetHarberger
             clicked={this.getHarbergerClickHandler}
             changed={this.getHarbergerChangeHandler}
           />
-
+          <br />
           <TransferTokens
             fromChanged={this.transferFromChangeHandler}
             amountChanged={this.transferAmountChangeHandler}

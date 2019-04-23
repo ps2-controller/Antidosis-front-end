@@ -14,6 +14,7 @@ const setHarberger = (props) => {
             name="harbergerValue"
             onChange={(event) => {props.valChanged(event)}}
         />
+        <br />
         <label>
             Harberger Duration
         </label>
@@ -21,10 +22,12 @@ const setHarberger = (props) => {
             name="harbergerValue"
             onChange={(event) => {props.durChanged(event)}}
         />
+        <br />
         <button
             onClick={() => {props.clicked(context)}}
         >Set Harberger Values
         </button>
+        <br />
         </React.Fragment>
     )
 }

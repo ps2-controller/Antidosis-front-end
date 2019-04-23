@@ -12,9 +12,11 @@ const getHarberger = (props) => {
         <input
             onChange={(event) => props.changed(event)}
         />
+        <br />
         <button
             onClick={() => {props.clicked(context)}}
         >Get Harberger Values</button>
+        <br />
         </React.Fragment>
 
     )

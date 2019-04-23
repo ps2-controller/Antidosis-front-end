@@ -15,10 +15,12 @@ const allowDai = (props) => {
             name="atcAddress"
             onChange={(event) => {props.changed(event)}}
         />
+        <br />
         <button
             className={styles.Button}
             onClick={() => {props.clicked(context)}}
         >Set Dai Allowance</button>
+        <br />
         </React.Fragment>
     )
 }

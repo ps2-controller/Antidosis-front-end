@@ -5,7 +5,6 @@ import cx from 'classnames';
 
 const connect = (props) => {
     const context = useWeb3Context();
-    console.log(props.connection)
     let connective = Object.keys(props.connection).map(connectorName => (
         <button
         key={connectorName}
